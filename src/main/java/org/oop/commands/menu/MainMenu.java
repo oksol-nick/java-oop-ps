@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MainMenu extends BaseCommand {
     private final IAuthService authService;
 
-    public MainMenu() {
+    public  MainMenu() {
         this.authService = Injector.getInstance().getService(IAuthService.class);
         initializeMenu();
     }

@@ -5,6 +5,7 @@ import org.oop.api.IAuthService;
 import org.oop.api.dao.IArticleDao;
 import org.oop.di.Injector;
 import org.oop.model.Article;
+import org.oop.model.Comment;
 
 import java.util.List;
 
@@ -54,5 +55,11 @@ public class ArticleService implements IArticleService {
     @Override
     public boolean deleteArticle(long id) {
         return articleDao.deleteArticle(id);
+    }
+
+    @Override
+    public void commentArticle(Comment comment) {
+        long authorId = authService.getCurrentUserId();
+        articleDao.commentArticle(authorId, comment);
     }
 }

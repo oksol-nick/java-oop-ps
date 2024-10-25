@@ -5,7 +5,7 @@ import org.oop.api.IAuthService;
 import org.oop.api.IOService;
 import org.oop.di.Injector;
 import org.oop.model.Article;
-
+import org.oop.model.Comment;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +13,12 @@ import java.util.Scanner;
 
 public class ConsoleIOService implements IOService {
     private final Scanner scanner;
+    private final IAuthService authService;
 
     public ConsoleIOService() {
 
         this.scanner = new Scanner(System.in);
+        this.authService = Injector.getInstance().getService(IAuthService.class);
     }
 
     @Override
@@ -68,6 +70,14 @@ public class ConsoleIOService implements IOService {
 
             if (selectedArticle != null) {
                 printLine(selectedArticle.toString());
+                if(authService.getCurrentUserId() > 0) {
+                    String comment = prompt("Оставьте комментарий к статье (оставьте поле пустым и нажмите Enter, если не хотите оставлять комментарий): ");
+                    if (!comment.isEmpty()) {
+                        Comment articleComment = new Comment(articleId, comment);
+                        articleService.commentArticle(articleComment);
+                        printLine("Комментарий успешно добавлен.");
+                    }
+                } else {printLine("Авторизуйтесь, чтобы оставить комментарий к статье");}
             } else {
                 printLine("Статьи с ID " + articleId + " не существует.");
             }

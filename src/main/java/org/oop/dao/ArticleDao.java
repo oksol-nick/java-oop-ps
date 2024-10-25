@@ -2,12 +2,15 @@ package org.oop.dao;
 
 import org.oop.api.dao.IArticleDao;
 import org.oop.model.Article;
+import org.oop.model.Comment;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArticleDao extends Dao implements IArticleDao {
+
+    private int uathorId;
 
     @Override
     public Article createArticle(Article article) {
@@ -143,4 +146,29 @@ public class ArticleDao extends Dao implements IArticleDao {
         }
         return false;
     }
+
+    @Override
+    public void commentArticle(long authorId, Comment comment) {
+        String query = "INSERT INTO comments (article_id, user_id, comment_text) VALUES (?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setLong(1, comment.getArt_Id());
+            preparedStatement.setLong(2, authorId);
+            preparedStatement.setString(3, comment.getComment());
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating comment failed");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+
+        }
+    }
+
+
 }

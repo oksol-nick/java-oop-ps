@@ -29,6 +29,7 @@ public class ArticleSearchCommand extends BaseCommand {
             ioService.printArticles(articles, Injector.getInstance().getService(IArticleService.class));
         }
 
+        //return new ArticleCommentMenu();
         return new MainMenu();
     }
 
