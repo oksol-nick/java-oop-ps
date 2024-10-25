@@ -52,7 +52,8 @@ public class Main {
                 System.out.println("10. Посмотреть все статьи");
                 System.out.println("11. Удалить статью");
                 System.out.println("12. Искать статью по заголовку");
-                System.out.println("13. Выйти");
+                System.out.println("13. Добавить комментарий к статье");
+                System.out.println("14. Выйти");
                 System.out.print("Выберите опцию: ");
                 choosenOption = scanner.nextLine();
                 switch (choosenOption) {
@@ -82,6 +83,9 @@ public class Main {
                         searchArticlesByTitle(database);
                         break;
                     case "13":
+                        commentArticlesByID(loggedInUserId, database);
+                        break;
+                    case "14":
                         System.exit(0);
                         break;
                     default:
@@ -333,5 +337,14 @@ public class Main {
         List<Article> foundArticles = database.ga(title);
         if (foundArticles.isEmpty()) System.out.println("Статьи не найдены.");
         foundArticles.forEach(a -> System.out.println("ID: " + a.id + ", Заголовок: " + a.title));
+    }
+
+    static void commentArticlesByID(long articleId, D database) {
+        System.out.print("Введите ID статьи: ");
+        Long articleID = Long.valueOf(scanner.nextLine());
+        System.out.print("Введите комментарий: ");
+        String comment = scanner.nextLine();
+        database.addComment(articleID, comment);
+        System.out.println("Комментарий успешно добавлен.");
     }
 }

@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.oop.Main.loggedInUserId;
+
 public class D {
     public void initializeDatabase() {
         {
@@ -45,7 +47,7 @@ public class D {
                 ex.printStackTrace();
             }
 
-            try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/oopshop", "exampleuser", "examplepass");
+            try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5438/oopshop", "exampleuser", "examplepass");
                  Statement stmt = conn.createStatement()) {
                 for (String sql : initializationQueries) {
                     stmt.execute(sql);
@@ -63,7 +65,7 @@ public class D {
     public Article ca(Article article) {
         String query = "INSERT INTO articles (title, content, author_id) VALUES (?, ?, ?)";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -96,7 +98,7 @@ public class D {
     public Article gai(long id) {
         String query = "SELECT id, title, content, author_id FROM articles WHERE id = ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -123,7 +125,7 @@ public class D {
         List<Article> articles = new ArrayList<>();
         String query = "SELECT id, title, content, author_id FROM articles WHERE title LIKE ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -150,7 +152,7 @@ public class D {
         List<Article> articles = new ArrayList<>();
         String query = "SELECT id, title, content, author_id FROM articles";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -176,7 +178,7 @@ public class D {
     public boolean ua(Article article) {
         String query = "UPDATE articles SET title = ?, content = ?, author_id = ?, WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -198,7 +200,7 @@ public class D {
     public boolean da(long id) {
         String query = "DELETE FROM articles WHERE id = ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -219,7 +221,7 @@ public class D {
         // SQL запрос для добавления нового пользователя
         String query = "INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)";
         // Прямое соединение с базой данных в методе - нарушает SRP
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/oopshop", "exampleuser", "examplepass");
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5438/oopshop", "exampleuser", "examplepass");
              PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, user.username);
@@ -252,7 +254,7 @@ public class D {
         String query = "SELECT id, username, password, email, role FROM users WHERE id = ?";
 
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -282,7 +284,7 @@ public class D {
         String query = "SELECT id, username, password, email, role FROM users WHERE username = ?";
 
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -311,7 +313,7 @@ public class D {
         List<User> users = new ArrayList<>();
         String query = "SELECT id, username, password, email, role FROM users";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -337,7 +339,7 @@ public class D {
     public boolean uu(User user) {
         String query = "UPDATE users SET username = ?, password = ?, email = ?, role = ? WHERE id = ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -360,7 +362,7 @@ public class D {
     public boolean du(int userId) {
         String query = "DELETE FROM users WHERE id = ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -378,7 +380,7 @@ public class D {
     public boolean cur(int userId, Role newRole) {
         String query = "UPDATE users SET role = ? WHERE id = ?";
         try (Connection connection =  DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -400,7 +402,7 @@ public class D {
         String hashedPassword = hashPassword(newPassword);
         String query = "UPDATE users SET password = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/oopshop",
+                "jdbc:postgresql://localhost:5438/oopshop",
                 "exampleuser",
                 "examplepass"
         );
@@ -415,5 +417,28 @@ public class D {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void addComment(Long ID, String comment) {
+        String query = "INSERT INTO comments (article_id, user_id, comment_text) VALUES (?, ?, ?)";
+        try (Connection connection =  DriverManager.getConnection(
+                "jdbc:postgresql://localhost:5438/oopshop",
+                "exampleuser",
+                "examplepass"
+        );
+             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setLong(1, ID);
+            preparedStatement.setLong(2, loggedInUserId);
+            preparedStatement.setString(3, comment);
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating comment failed");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
